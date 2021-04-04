@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark clipped-left>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="toggleMenu()"></v-app-bar-nav-icon>
       <div class="d-flex align-center">
         <h3
           class="shrink mt-1 hidden-sm-and-down"
@@ -29,9 +29,19 @@ export default {
 
   components: {MenuBar},
 
-  data: () => ({
-    drawer: false
-  }),
+  data: () => ({test: false}),
+
+  computed: {
+    drawer() {
+      return this.$store.state.drawer
+    }
+  },
+
+  methods: {
+    toggleMenu() {
+      this.$store.commit('toggleMenu')
+    }
+  },
 
   created() {
     http.get('pts/').then((response) => {

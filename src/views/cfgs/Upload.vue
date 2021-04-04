@@ -1,5 +1,5 @@
 <template>
-  <p>HOME</p>
+  <p>UPLOAD</p>
 </template>
 
 <script>

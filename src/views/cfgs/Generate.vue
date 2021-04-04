@@ -1,5 +1,5 @@
 <template>
-  <p>HOME</p>
+  <p>GENERAR</p>
 </template>
 
 <script>
