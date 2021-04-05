@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import http from '@/http-common.js'
 import MenuBar from '@/components/MenuBar'
 
 export default {
@@ -43,14 +42,6 @@ export default {
     toggleMenu() {
       this.$store.commit('toggleMenu')
     }
-  },
-
-  created() {
-    http.get('pts/').then((response) => {
-      if (response.status == 200) {
-        console.log(response.data)
-      }
-    })
   }
 }
 </script>

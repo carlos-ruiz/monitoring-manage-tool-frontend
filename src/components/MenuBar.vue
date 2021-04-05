@@ -4,7 +4,7 @@
       <div v-for="(item, i) in menus" :key="i">
         <v-list-group
           v-if="item.submenus"
-          active-class="deep-purple--text text--accent-4"
+          active-class="blue--text text--accent-4"
         >
           <v-icon slot="prependIcon">{{ item.icon }}</v-icon>
           <template v-slot:activator>
