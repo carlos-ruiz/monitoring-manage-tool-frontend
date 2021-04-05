@@ -49,7 +49,11 @@ export default {
         submenus: [
           {title: 'Generar CFGs', path: '/cfgs/generate'},
           {title: 'Subir a los nagios', path: '/cfgs/upload'},
-          {title: 'Descargar CFGs', path: '/cfgs/download'}
+          {title: 'Descargar CFGs', path: '/cfgs/download'},
+          {
+            title: 'Descargar plantilla',
+            path: '/cfgs/download_template'
+          }
         ]
       },
       {

@@ -29,6 +29,14 @@ const routes = [
       import(/* webpackChunkName: "about" */ '../views/cfgs/Download.vue')
   },
   {
+    path: '/cfgs/download_template',
+    name: 'Download Template',
+    component: () =>
+      import(
+        /* webpackChunkName: "about" */ '../views/cfgs/DownloadTemplate.vue'
+      )
+  },
+  {
     path: '/pts',
     name: 'PTs List',
     component: () => import(/* webpackChunkName: "about" */ '../views/PTs.vue')
