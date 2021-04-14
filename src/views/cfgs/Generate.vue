@@ -80,6 +80,17 @@
               </v-col>
             </v-row>
           </v-card-text>
+          <v-card-actions>
+            <v-container fill-height>
+              <v-row>
+                <v-col>
+                  <v-btn color="primary" @click="downloadCfgs()"
+                    >Descargar CFGs</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-actions>
         </v-card>
       </v-card-text>
     </v-card>
@@ -90,16 +101,20 @@
 import http from '@/http-common.js'
 export default {
   name: 'Generar_CFGS',
+  metaInfo: {
+    title: 'Generate'
+  },
   data: () => ({
     file: null,
     uploaded: false,
     cfgsGenerated: false,
     cfgsWarning: false,
+    filesPath: '',
     filesOK: [],
     filesFailed: [],
     typesMapping: [
-      {type: 'Firewall(ip de cluster', description: 'fwcluster'},
-      {type: 'Firewall(ips físicos', description: 'fwmember'},
+      {type: 'Firewall(ip de cluster)', description: 'fwcluster'},
+      {type: 'Firewall(ips físicos)', description: 'fwmember'},
       {type: 'Switches', description: 'switches'},
       {type: 'Servidores de VV (GE y RC)', description: 'vv'},
       {type: 'Servidores DDI', description: 'ddi'},
@@ -152,10 +167,28 @@ export default {
               'Algunos CFGs no se generaron de manera correcta'
             )
           }
+          this.filesPath = response.data.path
         })
         .catch((e) => {
           console.log(e)
           this.$toast.error('Se produjo un error al generar los cfgs')
+        })
+    },
+    downloadCfgs() {
+      http
+        .post('cfgs/download_cfgs/', {
+          responseType: 'blob',
+          path: this.filesPath
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            var fileURL = window.URL.createObjectURL(new Blob([response.data]))
+            var fileLink = document.createElement('a')
+            fileLink.href = fileURL
+            fileLink.setAttribute('download', 'cfgs.zip')
+            document.body.appendChild(fileLink)
+            fileLink.click()
+          }
         })
     }
   }
