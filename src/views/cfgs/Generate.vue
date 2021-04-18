@@ -176,18 +176,25 @@ export default {
     },
     downloadCfgs() {
       http
-        .post('cfgs/download_cfgs/', {
-          responseType: 'blob',
-          path: this.filesPath
-        })
+        .post(
+          'cfgs/download_cfgs/',
+          {
+            path: this.filesPath
+          },
+          {
+            responseType: 'blob'
+          }
+        )
         .then((response) => {
           if (response.status == 200) {
-            var fileURL = window.URL.createObjectURL(new Blob([response.data]))
+            const blob = new Blob([response.data], {type: 'application/zlib'})
+            var fileURL = window.URL.createObjectURL(blob)
             var fileLink = document.createElement('a')
             fileLink.href = fileURL
             fileLink.setAttribute('download', 'cfgs.zip')
             document.body.appendChild(fileLink)
             fileLink.click()
+            URL.revokeObjectURL(fileLink.href)
           }
         })
     }
