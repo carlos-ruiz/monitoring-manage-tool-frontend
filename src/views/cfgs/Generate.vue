@@ -88,9 +88,47 @@
                     >Descargar CFGs</v-btn
                   >
                 </v-col>
+                <v-col>
+                  <v-btn color="primary" @click="deployCfgs()"
+                    >Subir CFGs a Nagios</v-btn
+                  >
+                </v-col>
               </v-row>
             </v-container>
           </v-card-actions>
+        </v-card>
+      </v-card-text>
+    </v-card>
+    <v-card v-if="cfgsUploaded">
+      <v-card-title>CFGs cargados</v-card-title>
+      <v-card-text>
+        <v-card v-if="cfgsUploaded">
+          <v-card-title>Correctos</v-card-title>
+          <v-card-text class="green--text text--lighten-1">
+            <v-row>
+              <v-col
+                class="col-md-2 col-2 col-sm-2"
+                v-for="i in filesUploadedOK"
+                :key="i"
+              >
+                {{ i }}
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+        <v-card v-if="cfgsUploadedWarning">
+          <v-card-title>Con errores</v-card-title>
+          <v-card-text class="red--text text--lighten-1">
+            <v-row>
+              <v-col
+                class="col-md-2 col-2 col-sm-2"
+                v-for="i in filesUploadedFailed"
+                :key="i"
+              >
+                {{ i }}
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
       </v-card-text>
     </v-card>
@@ -112,6 +150,10 @@ export default {
     filesPath: '',
     filesOK: [],
     filesFailed: [],
+    cfgsUploaded: false,
+    cfgsUploadedWarning: false,
+    filesUploadedOK: [],
+    filesUploadedFailed: [],
     typesMapping: [
       {type: 'Firewall(ip de cluster)', description: 'fwcluster'},
       {type: 'Firewall(ips físicos)', description: 'fwmember'},
@@ -195,6 +237,26 @@ export default {
             document.body.appendChild(fileLink)
             fileLink.click()
             URL.revokeObjectURL(fileLink.href)
+          }
+        })
+    },
+    deployCfgs() {
+      http
+        .post('cfgs/deploy/', {
+          path: this.filesPath
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            console.log(response.data)
+            this.cfgsUploaded = true
+            this.filesUploadedOK = response.data.ok
+            if (response.data.files_failed > 0) {
+              this.filesUploadedFailed = response.data.errors
+              this.cfgsUploadedWarning = true
+              this.$toast.warning(
+                'Algunos CFGs no se cargaron de manera correcta'
+              )
+            }
           }
         })
     }
