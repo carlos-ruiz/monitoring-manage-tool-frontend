@@ -31,54 +31,58 @@
           </v-card-text>
         </v-card>
       </v-container>
-    </v-card-text>
-    <v-card-actions>
-      <v-container fill-height>
-        <v-row>
-          <v-col>
+
+      <v-container>
+        <v-card>
+          <v-card-text>
             <v-file-input
               v-model="file"
               show-size
               accept=".csv"
               label="Subir archivo"
             />
-          </v-col>
-          <v-col>
             <v-btn color="primary" @click="onPickupFile()">Generar CFGs</v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-actions>
-    <v-spacer />
-    <v-card v-if="cfgsGenerated">
-      <v-card-title>CFGs generados</v-card-title>
-      <v-card-text>
-        <v-card v-if="cfgsGenerated">
-          <v-card-title>Correctos</v-card-title>
-          <v-card-text class="green--text text--lighten-1">
-            <v-row>
-              <v-col
-                class="col-md-2 col-2 col-sm-2"
-                v-for="i in filesOK"
-                :key="i"
-              >
-                {{ i }}
-              </v-col>
-            </v-row>
           </v-card-text>
         </v-card>
-        <v-card v-if="cfgsWarning">
-          <v-card-title>Con errores</v-card-title>
-          <v-card-text class="red--text text--lighten-1">
-            <v-row>
-              <v-col
-                class="col-md-2 col-2 col-sm-2"
-                v-for="i in filesFailed"
-                :key="i"
-              >
-                {{ i }}
-              </v-col>
-            </v-row>
+      </v-container>
+
+      <v-container>
+        <v-card v-if="cfgsGenerated">
+          <v-card-title>CFGs generados</v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-card v-if="cfgsGenerated">
+                <v-card-title>Correctos</v-card-title>
+                <v-card-text class="green--text text--lighten-1">
+                  <v-row>
+                    <v-col
+                      class="col-md-3 col-12 col-sm-4"
+                      v-for="i in filesOK"
+                      :key="i"
+                    >
+                      {{ i }}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-container>
+
+            <v-container>
+              <v-card v-if="cfgsWarning">
+                <v-card-title>Con errores</v-card-title>
+                <v-card-text class="red--text text--lighten-1">
+                  <v-row>
+                    <v-col
+                      class="col-md-2 col-2 col-sm-2"
+                      v-for="i in filesFailed"
+                      :key="i"
+                    >
+                      {{ i }}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-container>
           </v-card-text>
           <v-card-actions>
             <v-container fill-height>
@@ -97,41 +101,48 @@
             </v-container>
           </v-card-actions>
         </v-card>
-      </v-card-text>
-    </v-card>
-    <v-card v-if="cfgsUploaded">
-      <v-card-title>CFGs cargados</v-card-title>
-      <v-card-text>
+      </v-container>
+
+      <v-container>
         <v-card v-if="cfgsUploaded">
-          <v-card-title>Correctos</v-card-title>
-          <v-card-text class="green--text text--lighten-1">
-            <v-row>
-              <v-col
-                class="col-md-2 col-2 col-sm-2"
-                v-for="i in filesUploadedOK"
-                :key="i"
-              >
-                {{ i }}
-              </v-col>
-            </v-row>
+          <v-card-title>CFGs cargados</v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-card v-if="cfgsUploaded">
+                <v-card-title>Correctos</v-card-title>
+                <v-card-text class="green--text text--lighten-1">
+                  <v-row>
+                    <v-col
+                      class="col-md-2 col-2 col-sm-2"
+                      v-for="i in filesUploadedOK"
+                      :key="i"
+                    >
+                      {{ i }}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-container>
+            <v-container>
+              <v-card v-if="cfgsUploadedWarning">
+                <v-card-title>Con errores</v-card-title>
+                <v-card-text class="red--text text--lighten-1">
+                  <v-row>
+                    <v-col
+                      class="col-md-2 col-2 col-sm-2"
+                      v-for="i in filesUploadedFailed"
+                      :key="i"
+                    >
+                      {{ i }}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-container>
           </v-card-text>
         </v-card>
-        <v-card v-if="cfgsUploadedWarning">
-          <v-card-title>Con errores</v-card-title>
-          <v-card-text class="red--text text--lighten-1">
-            <v-row>
-              <v-col
-                class="col-md-2 col-2 col-sm-2"
-                v-for="i in filesUploadedFailed"
-                :key="i"
-              >
-                {{ i }}
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-card-text>
-    </v-card>
+      </v-container>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -246,6 +257,9 @@ export default {
           path: this.filesPath
         })
         .then((response) => {
+          this.filesUploadedFailed = []
+          this.filesUploadedOK = []
+          this.cfgsUploadedWarning = false
           if (response.status == 200) {
             console.log(response.data)
             this.cfgsUploaded = true
