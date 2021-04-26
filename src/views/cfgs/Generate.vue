@@ -173,7 +173,10 @@ export default {
       {type: 'Servidores DDI', description: 'ddi'},
       {type: 'Servidores Linux', description: 'linux'},
       {type: 'Servidores Windows', description: 'windows'},
-      {type: 'IPs de TSM', description: 'servers'}
+      {type: 'IPs de TSM', description: 'servers'},
+      {type: 'Servidor ESX(ip fisica)', description: 'esx'},
+      {type: 'Access Point', description: 'ap'},
+      {type: 'Planets', description: 'planet'}
     ]
   }),
   methods: {
