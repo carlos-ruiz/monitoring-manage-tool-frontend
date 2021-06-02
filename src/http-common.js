@@ -8,24 +8,3 @@ const axios_instance = axios.create({
 })
 
 export default axios_instance
-
-// axios_instance.interceptors.response.use(
-//   (response) => {
-//     // intercept the global error
-//     return response
-//   },
-//   function(error) {
-//     if (error.response.status === 401) {
-//       // if the error is 401 and hasent already been retried
-//       Vue.$toast.error('Su sesión ha expirado')
-//       console.log('Error unauthorized')
-//       localStorage.removeItem('logged')
-//       localStorage.removeItem('token')
-//       setTimeout(() => {
-//         window.location = '/'
-//       }, 3000)
-//       return
-//     }
-//     return Promise.reject(error)
-//   }
-// )
