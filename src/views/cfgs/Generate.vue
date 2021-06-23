@@ -142,6 +142,44 @@
           </v-card-text>
         </v-card>
       </v-container>
+
+      <v-container>
+        <v-card v-if="nagiosServiceWarning">
+          <v-card-title>PTs con errores</v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-card v-if="nagiosServiceWarning">
+                <v-card-title>Con errores</v-card-title>
+                <v-card-text class="red--text text--lighten-1">
+                  <v-row>
+                    <v-col
+                      class="col-md-2 col-2 col-sm-2"
+                      v-for="i in nagiosErrors"
+                      :key="i"
+                    >
+                      {{ i }}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+              <v-card v-if="cfgsUploadedWarning">
+                <v-card-title>Con errores</v-card-title>
+                <v-card-text class="red--text text--lighten-1">
+                  <v-row>
+                    <v-col
+                      class="col-md-2 col-2 col-sm-2"
+                      v-for="i in filesUploadedFailed"
+                      :key="i"
+                    >
+                      {{ i }}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-container>
     </v-card-text>
   </v-card>
 </template>
@@ -165,6 +203,8 @@ export default {
     cfgsUploadedWarning: false,
     filesUploadedOK: [],
     filesUploadedFailed: [],
+    nagiosErrors: [],
+    nagiosServiceWarning: false,
     typesMapping: [
       {type: 'Firewall(ip de cluster)', description: 'fwcluster'},
       {type: 'Firewall(ips físicos)', description: 'fwmember'},
@@ -204,6 +244,7 @@ export default {
     },
     generateCFGs(filename) {
       console.log('Filename: ' + filename)
+      this.clearData()
       http
         .post('cfgs/generate/', {
           filename
@@ -274,8 +315,25 @@ export default {
                 'Algunos CFGs no se cargaron de manera correcta'
               )
             }
+            if(response.data.pts_failed > 0){
+              this.nagiosErrors = response.data.list_pts_failed
+              this.nagiosServiceWarning = true
+              this.$toast.error("Favor de validar los CFGs de los siguientes PTs, fallo la validación")
+            }
           }
         })
+    },
+    clearData(){
+      this.filesUploadedFailed = []
+      this.filesUploadedOK = []
+      this.cfgsUploadedWarning = false
+      this.cfgsUploaded = false
+      this.nagiosErrors = []
+      this.nagiosServiceWarning = false
+      this.cfgsGenerated = false
+      this.cfgsWarning = false
+      this.filesOK = []
+      this.filesFailed = []
     }
   }
 }
