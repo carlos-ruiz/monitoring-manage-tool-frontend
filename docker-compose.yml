@@ -1,0 +1,11 @@
+version: '3'
+services:
+  front:
+    build:
+      context: .
+      dockerfile: ./frontend.dockerfile
+    container_name: pita-frontend
+    ports:
+      - '8080:80'
+    volumes:
+      - .:/app
