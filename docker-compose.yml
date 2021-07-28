@@ -7,5 +7,3 @@ services:
     container_name: pita-frontend
     ports:
       - '8080:80'
-    volumes:
-      - .:/app
