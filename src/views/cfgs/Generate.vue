@@ -216,7 +216,7 @@ export default {
       {type: 'IPs de TSM', description: 'servers'},
       {type: 'Servidor ESX(ip fisica)', description: 'esx'},
       {type: 'Access Point', description: 'ap'},
-      {type: 'Planets', description: 'planet'}
+      {type: 'Planets', description: 'planets'}
     ]
   }),
   methods: {
